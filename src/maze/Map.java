@@ -104,6 +104,7 @@ public class Map {
 				k1.name = "HP +10";
 				k1.pos.x = staX * ROOM_SIZE + 4;
 				k1.pos.y = staY * ROOM_SIZE + 4;
+				newMap.objects.add(k1);
 
 				for (int y = staY * ROOM_SIZE + 3; y < (staY + 1) * ROOM_SIZE - 3; y ++)
 				for (int x = staX * ROOM_SIZE + 3; x < (staX + 1) * ROOM_SIZE - 3; x ++)

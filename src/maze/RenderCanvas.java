@@ -58,7 +58,7 @@ public class RenderCanvas extends JPanel {
 			}
 		}
 		}
-		for (Object o : objects) {
+		for (Object o : _map.objects) {
 			pos.x = o.pos.x + translation.x;
 			pos.y = o.pos.y + translation.y;
 			if (pos.x >= 0 && pos.x < map.width && pos.y >= 0 && pos.y < map.height &&
