@@ -46,7 +46,7 @@ public class RenderCanvas extends JPanel {
 		for (int j = 0; j < colorMap.height; j ++)
 			colorMap.data[j][i] = 1;
 		v2 pos = new v2();
-		v2 mid = new v2(map.width / 2, map.height / 2);
+		v2 mid = new v2(map.width / 2, map.height / 2 - 1);
 		int limitSq = limit * limit;
 		for (int i = 0; i < _map.width; i ++) {
 		for (int j = 0; j < _map.height; j ++) {
@@ -57,6 +57,15 @@ public class RenderCanvas extends JPanel {
 				map.data[pos.y][pos.x] = _map.data[j][i];
 			}
 		}
+		}
+		for (Object o : objects) {
+			pos.x = o.pos.x + translation.x;
+			pos.y = o.pos.y + translation.y;
+			if (pos.x >= 0 && pos.x < map.width && pos.y >= 0 && pos.y < map.height &&
+					limit > 0 && pos.distToSq(mid) <= limitSq) {
+				map.data[pos.y][pos.x] = o.icon;
+				colorMap.data[pos.y][pos.x] = o.color;
+			}
 		}
 	}
 

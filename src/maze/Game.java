@@ -1,5 +1,6 @@
 package maze;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import java.awt.event.KeyEvent;
@@ -27,6 +28,7 @@ public class Game {
 	public GUI the_gui;
 	public InputHandler the_handler;
 	public Map the_map;
+	public int focus;
 
 	public Game(Random rand) {
 		the_rand = rand;
@@ -37,10 +39,14 @@ public class Game {
 
 	public boolean start() {
 		the_map = Map.createMap(the_rand);
+		focus = -1;
+		the_player.pos.x = 3;
+		the_player.pos.y = 3;
 		return resumeLevel();
 	}
 
 	public boolean resumeLevel() {
+		focus = 0;
 		the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
 		the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
 		the_gui.setBackground(the_map);
@@ -86,7 +92,34 @@ public class Game {
 		playerStatus.pos.x = GUI.MAP_WIDTH - 16;
 		playerStatus.pos.y = GUI.MAP_HEIGHT - 2 - 6;
 		the_gui.addObject(playerStatus);
-		//MenuObject 
+		the_gui.draw();
+		return true;
+	}
+
+	public boolean openLevelMenu() {
+		focus ++;
+		the_gui.setGuide(GUIDE_MENU);
+		MenuObject playerMenu = new MenuObject();
+		playerMenu.pos.x = 0;
+		playerMenu.pos.y = GUI.MAP_HEIGHT - 2 - 8;
+		playerMenu.options = new char[6][];
+		playerMenu.options[0] = "Pertarungan".toCharArray();
+		playerMenu.options[1] = new char[0];
+		playerMenu.options[2] = "Status".toCharArray();
+		playerMenu.options[3] = "Jurus".toCharArray();
+		playerMenu.options[4] = "Buka Tas".toCharArray();
+		playerMenu.options[5] = "Kembali".toCharArray();
+		playerMenu.selected = 2;
+		playerMenu.color = 1;
+		playerMenu.color2 = 3;
+		the_gui.addObject(playerMenu);
+		the_gui.draw();
+		return true;
+	}
+
+	public boolean closeLevelMenu() {
+		focus --;
+		the_gui.closeObject();
 		the_gui.draw();
 		return true;
 	}
@@ -97,22 +130,32 @@ public class Game {
 	public void onKeyPressed(KeyEvent ev) {
 		int keyCode = ev.getKeyCode();
 		//System.out.println("key pressed: " + keyCode);
-		if (keyCode == 37) {
-			the_player.pos.x --;
-			the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
-			the_gui.draw();
+		if (keyCode == 65) {
+			openLevelMenu();
+		} else if (keyCode == 37) {
+			if (Map.isWalkable(the_map.data[the_player.pos.y][the_player.pos.x - 1])) {
+				the_player.pos.x --;
+				the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
+				the_gui.draw();
+			}
 		} else if (keyCode == 38) {
-			the_player.pos.y --;
-			the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
-			the_gui.draw();
+			if (Map.isWalkable(the_map.data[the_player.pos.y - 1][the_player.pos.x])) {
+				the_player.pos.y --;
+				the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
+				the_gui.draw();
+			}
 		} else if (keyCode == 39) {
-			the_player.pos.x ++;
-			the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
-			the_gui.draw();
+			if (Map.isWalkable(the_map.data[the_player.pos.y][the_player.pos.x + 1])) {
+				the_player.pos.x ++;
+				the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
+				the_gui.draw();
+			}
 		} else if (keyCode == 40) {
-			the_player.pos.y ++;
-			the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
-			the_gui.draw();
+			if (Map.isWalkable(the_map.data[the_player.pos.y + 1][the_player.pos.x])) {
+				the_player.pos.y ++;
+				the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
+				the_gui.draw();
+			}
 		}
 	}
 }

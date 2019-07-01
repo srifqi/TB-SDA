@@ -30,6 +30,13 @@ public class Map {
 		data = new char[_height][_width];
 	}
 
+	public static boolean isWalkable(char tile) {
+		for (char i : WALKABLE)
+			if (tile == i)
+				return true;
+		return false;
+	}
+
 	private static int DSFind(int[] DS, int i) {
 		while (DS[i] != -1)
 			i = DS[i];
