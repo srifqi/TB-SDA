@@ -94,16 +94,16 @@ public class Map {
 				int endY = edges[i][1] / DS_SIZE;
 
 				Monster phip = new Monster(rand);
-				phip.pos.x = staX * ROOM_SIZE + 3;
-				phip.pos.y = staY * ROOM_SIZE + 3;
-				phip.HP = rand.nextInt();
-				phip.maxHP = rand.nextInt();
+				phip.pos.x = staX * ROOM_SIZE + 3 + rand.nextInt((staX + 1) * ROOM_SIZE - 6);
+				phip.pos.y = staY * ROOM_SIZE + 3 + rand.nextInt((staY + 1) * ROOM_SIZE - 6);
+				phip.HP = rand.nextInt(101);
+				phip.maxHP = rand.nextInt(101);
 				newMap.objects.add(phip);
 
 				Item k1 = new Item(rand);
 				k1.name = "HP +10";
-				k1.pos.x = staX * ROOM_SIZE + 4;
-				k1.pos.y = staY * ROOM_SIZE + 4;
+				k1.pos.x = staX * ROOM_SIZE + 4 + rand.nextInt((staX + 1) * ROOM_SIZE - 8);
+				k1.pos.y = staY * ROOM_SIZE + 4 + rand.nextInt((staY + 1) * ROOM_SIZE - 8);
 				newMap.objects.add(k1);
 
 				for (int y = staY * ROOM_SIZE + 3; y < (staY + 1) * ROOM_SIZE - 3; y ++)
