@@ -33,6 +33,10 @@ public class Game {
 	public Game(Random rand) {
 		the_rand = rand;
 		the_player = new Player(the_rand);
+		the_player.maxHP = rand.nextInt(101);
+		the_player.HP = rand.nextInt(the_player.maxHP + 1);
+		the_player.maxmana = rand.nextInt(101);
+		the_player.mana = rand.nextInt(the_player.maxmana + 1);
 		the_gui = new GUI();
 		the_handler = new InputHandler(this);
 	}
@@ -77,15 +81,15 @@ public class Game {
 		ProgressBar playerStatusHP = new ProgressBar();
 		playerStatusHP.icon = 28;
 		playerStatusHP.color = 2;
-		playerStatusHP.value = 80;
+		playerStatusHP.value = the_player.HP;
 		playerStatusHP.min = 0;
-		playerStatusHP.max = 100;
+		playerStatusHP.max = the_player.maxHP;
 		ProgressBar playerStatusMana = new ProgressBar();
 		playerStatusMana.icon = 29;
 		playerStatusMana.color = 3;
-		playerStatusMana.value = 70;
+		playerStatusMana.value = the_player.mana;
 		playerStatusMana.min = 0;
-		playerStatusMana.max = 100;
+		playerStatusMana.max = the_player.maxmana;
 		playerStatus.bars = new ProgressBar[2];
 		playerStatus.bars[0] = playerStatusHP;
 		playerStatus.bars[1] = playerStatusMana;
