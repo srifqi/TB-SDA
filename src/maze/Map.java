@@ -1,6 +1,7 @@
 package maze;
 
 import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -14,13 +15,16 @@ public class Map {
 	public int width;
 	public int height;
 	public char[][] data;
-	public Object[] objects;
+	public ArrayList <Object> objects;
 
 	public char[] name;
 
-	public Map() {}
+	public Map() {
+		objects = new ArrayList<Object>();
+	}
 
 	public Map(int _width, int _height) {
+		this();
 		width = _width;
 		height = _height;
 		data = new char[_height][_width];
@@ -81,6 +85,18 @@ public class Map {
 				int staY = edges[i][0] / DS_SIZE;
 				int endX = edges[i][1] % DS_SIZE;
 				int endY = edges[i][1] / DS_SIZE;
+
+				Monster phip = new Monster(rand);
+				phip.pos.x = staX * ROOM_SIZE + 3;
+				phip.pos.y = staY * ROOM_SIZE + 3;
+				phip.HP = rand.nextInt();
+				phip.maxHP = rand.nextInt();
+				newMap.objects.add(phip);
+
+				Item k1 = new Item(rand);
+				k1.name = "HP +10";
+				k1.pos.x = staX * ROOM_SIZE + 4;
+				k1.pos.y = staY * ROOM_SIZE + 4;
 
 				for (int y = staY * ROOM_SIZE + 3; y < (staY + 1) * ROOM_SIZE - 3; y ++)
 				for (int x = staX * ROOM_SIZE + 3; x < (staX + 1) * ROOM_SIZE - 3; x ++)
