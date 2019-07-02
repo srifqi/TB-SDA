@@ -1,9 +1,14 @@
 package maze;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
 import java.awt.event.KeyEvent;
+
+enum GameAction {
+	NOACTION, RESUMELEVEL, MENU, STATUSSCREEN, ATTACKSCREEN, BAGSCREEN
+}
 
 public class Game {
 	public static final char[][][] GUIDE_MAIN = {
@@ -28,8 +33,9 @@ public class Game {
 	public GUI the_gui;
 	public InputHandler the_handler;
 	public Map the_map;
-	public int focus;
-	public MenuObject currentMenu;
+	public ArrayList<MenuObject> openedMenu;
+	public ArrayList<GameAction> focusMenu;
+	public ArrayList<char[][][]> guideMenu;
 
 	public Game(Random rand) {
 		the_rand = rand;
@@ -40,23 +46,28 @@ public class Game {
 		the_player.mana = rand.nextInt(the_player.maxmana + 1);
 		the_gui = new GUI();
 		the_handler = new InputHandler(this);
+		openedMenu = new ArrayList<MenuObject>();
+		focusMenu = new ArrayList<GameAction>();
+		guideMenu = new ArrayList<char[][][]>();
 	}
 
 	public boolean start() {
 		the_map = Map.createMap(the_rand);
-		focus = 0;
 		the_player.pos.x = 3;
 		the_player.pos.y = 3;
+		openedMenu.removeAll(openedMenu);
+		focusMenu.removeAll(focusMenu);
+		guideMenu.removeAll(guideMenu);
+		focusMenu.add(GameAction.NOACTION);
+		guideMenu.add(GUIDE_MAIN);
 		return resumeLevel();
 	}
 
 	public boolean resumeLevel() {
-		focus = 1;
 		the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
 		the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
 		the_gui.setBackground(the_map);
 		the_gui.limitBackgroundView(10);
-		the_gui.setGuide(GUIDE_MAIN);
 		the_gui.cleanObject();
 		CharacterObject playerObject = new CharacterObject();
 		playerObject.pos.x = GUI.MAP_WIDTH / 2;
@@ -97,13 +108,14 @@ public class Game {
 		playerStatus.pos.x = GUI.MAP_WIDTH - 16;
 		playerStatus.pos.y = GUI.MAP_HEIGHT - 2 - 6;
 		the_gui.addObject(playerStatus);
+		focusMenu.add(GameAction.RESUMELEVEL);
+		guideMenu.add(GUIDE_MAIN);
+		the_gui.setGuide(guideMenu.get(guideMenu.size() - 1));
 		the_gui.draw();
 		return true;
 	}
 
 	public boolean openLevelMenu() {
-		focus = 4;
-		the_gui.setGuide(GUIDE_MENU);
 		MenuObject playerMenu = new MenuObject();
 		playerMenu.pos.x = 0;
 		playerMenu.pos.y = GUI.MAP_HEIGHT - 2 - 8;
@@ -117,17 +129,61 @@ public class Game {
 		playerMenu.selected = 2;
 		playerMenu.color = 1;
 		playerMenu.color2 = 3;
-		currentMenu = playerMenu;
 		the_gui.addObject(playerMenu);
+		openedMenu.add(playerMenu);
+		focusMenu.add(GameAction.MENU);
+		guideMenu.add(GUIDE_MENU);
+		the_gui.setGuide(guideMenu.get(guideMenu.size() - 1));
 		the_gui.draw();
 		return true;
 	}
 
 	public boolean closeLevelMenu() {
-		focus = 1;
-		the_gui.setGuide(GUIDE_MAIN);
-		currentMenu = null;
 		the_gui.closeObject();
+		focusMenu.remove(focusMenu.size() - 1);
+		openedMenu.remove(openedMenu.size() - 1);
+		guideMenu.remove(guideMenu.size() - 1);
+		the_gui.setGuide(guideMenu.get(guideMenu.size() - 1));
+		the_gui.draw();
+		return true;
+	}
+
+	public boolean openBagScreen() {
+		MenuObject bagScreen = new MenuObject();
+		bagScreen.pos.x = 0;
+		bagScreen.pos.y = 0;
+		bagScreen.options = new char[4][];
+		bagScreen.options[0] = "Tas".toCharArray();
+		bagScreen.options[1] = new char[0];
+		bagScreen.options[2] = "HP +10".toCharArray();
+		bagScreen.options[3] = "Mana +10".toCharArray();
+		bagScreen.selected = 2;
+		bagScreen.color = 1;
+		bagScreen.color2 = 3;
+		the_gui.addObject(bagScreen);
+		TextObject itemInfo = new TextObject();
+		itemInfo.pos.x = GUI.MAP_WIDTH / 2 + 1;
+		itemInfo.pos.y = 3;
+		itemInfo.width = GUI.MAP_WIDTH / 2 - 1;
+		itemInfo.height = GUI.MAP_HEIGHT - 11;
+		itemInfo.text = "Item yang menyembuhkan sebesar 10 HP.".toCharArray();
+		itemInfo.color = 1;
+		the_gui.addObject(itemInfo);
+		openedMenu.add(bagScreen);
+		focusMenu.add(GameAction.BAGSCREEN);
+		guideMenu.add(GUIDE_MENU);
+		the_gui.setGuide(guideMenu.get(guideMenu.size() - 1));
+		the_gui.draw();
+		return true;
+	}
+
+	public boolean closeBagScreen() {
+		the_gui.closeObject();
+		the_gui.closeObject();
+		focusMenu.remove(focusMenu.size() - 1);
+		openedMenu.remove(openedMenu.size() - 1);
+		guideMenu.remove(guideMenu.size() - 1);
+		the_gui.setGuide(guideMenu.get(guideMenu.size() - 1));
 		the_gui.draw();
 		return true;
 	}
@@ -137,7 +193,9 @@ public class Game {
 
 	public void onKeyPressed(KeyEvent ev) {
 		int keyCode = ev.getKeyCode();
-		if (focus == 1) {
+		GameAction focus = focusMenu.isEmpty() ? null : focusMenu.get(focusMenu.size() - 1);
+		MenuObject currentMenu = openedMenu.isEmpty() ? null : openedMenu.get(openedMenu.size() - 1);
+		if (focus == GameAction.RESUMELEVEL) {
 			if (keyCode == 65) {
 				openLevelMenu();
 			} else if (keyCode == 37) {
@@ -165,21 +223,33 @@ public class Game {
 					the_gui.draw();
 				}
 			}
-		} else if (focus == 4) {
-			if (currentMenu != null) {
-				if (keyCode == 88) {
+		} else if (focus == GameAction.MENU) {
+			if (keyCode == 88) {
+				closeLevelMenu();
+			} else if (keyCode == 90) {
+				if (currentMenu.selected == currentMenu.options.length - 1) {
 					closeLevelMenu();
-				} else if (keyCode == 90) {
-					if (currentMenu.selected == currentMenu.options.length - 1) {
-						closeLevelMenu();
-					}
-				} else if (keyCode == 38) {
-					currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 5) % (currentMenu.options.length - 2)) + 2;
-					the_gui.draw();
-				} else if (keyCode == 40) {
-					currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 3) % (currentMenu.options.length - 2)) + 2;
-					the_gui.draw();
+				} else if (currentMenu.selected == 4) {
+					openBagScreen();
 				}
+			} else if (keyCode == 38) {
+				currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 5) % (currentMenu.options.length - 2)) + 2;
+				the_gui.draw();
+			} else if (keyCode == 40) {
+				currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 3) % (currentMenu.options.length - 2)) + 2;
+				the_gui.draw();
+			}
+		} else if (focus == GameAction.BAGSCREEN) {
+			if (keyCode == 88) {
+				closeBagScreen();
+			} else if (keyCode == 90) {
+				// ketika item dipilih
+			} else if (keyCode == 38) {
+				currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 5) % (currentMenu.options.length - 2)) + 2;
+				the_gui.draw();
+			} else if (keyCode == 40) {
+				currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 3) % (currentMenu.options.length - 2)) + 2;
+				the_gui.draw();
 			}
 		}
 	}
