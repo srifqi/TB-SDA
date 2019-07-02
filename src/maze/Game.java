@@ -29,6 +29,7 @@ public class Game {
 	public InputHandler the_handler;
 	public Map the_map;
 	public int focus;
+	public MenuObject currentMenu;
 
 	public Game(Random rand) {
 		the_rand = rand;
@@ -43,14 +44,14 @@ public class Game {
 
 	public boolean start() {
 		the_map = Map.createMap(the_rand);
-		focus = -1;
+		focus = 0;
 		the_player.pos.x = 3;
 		the_player.pos.y = 3;
 		return resumeLevel();
 	}
 
 	public boolean resumeLevel() {
-		focus = 0;
+		focus = 1;
 		the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
 		the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
 		the_gui.setBackground(the_map);
@@ -101,7 +102,7 @@ public class Game {
 	}
 
 	public boolean openLevelMenu() {
-		focus ++;
+		focus = 4;
 		the_gui.setGuide(GUIDE_MENU);
 		MenuObject playerMenu = new MenuObject();
 		playerMenu.pos.x = 0;
@@ -116,13 +117,16 @@ public class Game {
 		playerMenu.selected = 2;
 		playerMenu.color = 1;
 		playerMenu.color2 = 3;
+		currentMenu = playerMenu;
 		the_gui.addObject(playerMenu);
 		the_gui.draw();
 		return true;
 	}
 
 	public boolean closeLevelMenu() {
-		focus --;
+		focus = 1;
+		the_gui.setGuide(GUIDE_MAIN);
+		currentMenu = null;
 		the_gui.closeObject();
 		the_gui.draw();
 		return true;
@@ -134,31 +138,45 @@ public class Game {
 	public void onKeyPressed(KeyEvent ev) {
 		int keyCode = ev.getKeyCode();
 		//System.out.println("key pressed: " + keyCode);
-		if (keyCode == 65) {
-			openLevelMenu();
-		} else if (keyCode == 37) {
-			if (Map.isWalkable(the_map.data[the_player.pos.y][the_player.pos.x - 1])) {
-				the_player.pos.x --;
-				the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
-				the_gui.draw();
+		if (focus == 1) {
+			if (keyCode == 65) {
+				openLevelMenu();
+			} else if (keyCode == 37) {
+				if (Map.isWalkable(the_map.data[the_player.pos.y][the_player.pos.x - 1])) {
+					the_player.pos.x --;
+					the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
+					the_gui.draw();
+				}
+			} else if (keyCode == 38) {
+				if (Map.isWalkable(the_map.data[the_player.pos.y - 1][the_player.pos.x])) {
+					the_player.pos.y --;
+					the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
+					the_gui.draw();
+				}
+			} else if (keyCode == 39) {
+				if (Map.isWalkable(the_map.data[the_player.pos.y][the_player.pos.x + 1])) {
+					the_player.pos.x ++;
+					the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
+					the_gui.draw();
+				}
+			} else if (keyCode == 40) {
+				if (Map.isWalkable(the_map.data[the_player.pos.y + 1][the_player.pos.x])) {
+					the_player.pos.y ++;
+					the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
+					the_gui.draw();
+				}
 			}
-		} else if (keyCode == 38) {
-			if (Map.isWalkable(the_map.data[the_player.pos.y - 1][the_player.pos.x])) {
-				the_player.pos.y --;
-				the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
-				the_gui.draw();
-			}
-		} else if (keyCode == 39) {
-			if (Map.isWalkable(the_map.data[the_player.pos.y][the_player.pos.x + 1])) {
-				the_player.pos.x ++;
-				the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
-				the_gui.draw();
-			}
-		} else if (keyCode == 40) {
-			if (Map.isWalkable(the_map.data[the_player.pos.y + 1][the_player.pos.x])) {
-				the_player.pos.y ++;
-				the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
-				the_gui.draw();
+		} else if (focus == 4) {
+			if (currentMenu != null) {
+				if (keyCode == 88) {
+					closeLevelMenu();
+				} else if (keyCode == 38) {
+					currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 5) % (currentMenu.options.length - 2)) + 2;
+					the_gui.draw();
+				} else if (keyCode == 40) {
+					currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 3) % (currentMenu.options.length - 2)) + 2;
+					the_gui.draw();
+				}
 			}
 		}
 	}

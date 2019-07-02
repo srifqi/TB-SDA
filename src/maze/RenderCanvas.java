@@ -46,15 +46,20 @@ public class RenderCanvas extends JPanel {
 		for (int j = 0; j < colorMap.height; j ++)
 			colorMap.data[j][i] = 1;
 		v2 pos = new v2();
+		v2 screenPos = new v2();
 		v2 mid = new v2(map.width / 2, map.height / 2 - 1);
 		int limitSq = limit * limit;
-		for (int i = 0; i < _map.width; i ++) {
-		for (int j = 0; j < _map.height; j ++) {
-			pos.x = i + translation.x;
-			pos.y = j + translation.y;
-			if (pos.x >= 0 && pos.x < map.width && pos.y >= 0 && pos.y < map.height &&
-					limit > 0 && pos.distToSq(mid) <= limitSq) {
-				map.data[pos.y][pos.x] = _map.data[j][i];
+		for (int i = 0; i < map.width; i ++) {
+		for (int j = 0; j < map.height; j ++) {
+			screenPos.x = i;
+			screenPos.y = j;
+			pos.x = i - translation.x;
+			pos.y = j - translation.y;
+			if (pos.x >= 0 && pos.x < _map.width && pos.y >= 0 && pos.y < _map.height &&
+					limit > 0 && screenPos.distToSq(mid) <= limitSq) {
+				map.data[j][i] = _map.data[pos.y][pos.x];
+			} else {
+				map.data[j][i] = 0;
 			}
 		}
 		}

@@ -142,8 +142,9 @@ public class GUI extends JFrame {
 		guideList = _guide;
 	}
 
-	public void addObject(DrawObject _entry) {
+	public int addObject(DrawObject _entry) {
 		drawList.add(_entry);
+		return drawList.size() - 1;
 	}
 
 	public void closeObject() {
