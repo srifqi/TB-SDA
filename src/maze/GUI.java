@@ -87,13 +87,6 @@ public class GUI extends JFrame {
 	public static final int TILE_WIDTH = 12;
 	public static final int TILE_HEIGHT = 18;
 
-	public static final char[] BOX9 = {
-			226, 224, 227,
-			225,  32, 225,
-			228, 224, 229
-	};
-	public static final char[] LEVELTEXT = {76, 27};
-
 	private RenderCanvas canvas;
 	private Map backgroundMap;
 	public v2 backgroundMapTranslation;
@@ -184,16 +177,16 @@ public class GUI extends JFrame {
 		int height = 4 + state.bars.length;
 		if (state.entityType.length > 0)
 			height ++;
-		canvas.drawBox(x, y ++, 16, height, BOX9, (char) 1);
+		canvas.drawBox(x, y ++, 16, height, Tile.BOX9, (char) 1);
 		canvas.drawText(x + 2, y ++, 12, 1, state.name, (char) 3);
 		if (state.entityType.length > 0)
 			canvas.drawText(x + 2, y ++, 12, 1, state.entityType, (char) 2);
 		if (state.level >= 0) {
-			canvas.drawText(x + 2, y, 2, 1, LEVELTEXT, (char) 1);
+			canvas.drawText(x + 2, y, 2, 1, Tile.LEVELTEXT, (char) 1);
 			canvas.drawText(x + 5, y, 3, 1, String.format("%-3d", state.level).toCharArray(), (char) 1);
 		}
 		if (state.gender != GenderType.GENDERLESS)
-			canvas.drawChar(x + 13, y, (char) (state.gender == GenderType.FEMALE ? 30 : 31), (char) (state.gender == GenderType.FEMALE ? 6 : 5));
+			canvas.drawChar(x + 13, y, state.gender == GenderType.FEMALE ? Tile.ICON_FEMALE : Tile.ICON_MALE, (char) (state.gender == GenderType.FEMALE ? 6 : 5));
 		if (state.level >= 0 || state.gender != GenderType.GENDERLESS)
 			y ++;
 		for (int i = 0; i < state.bars.length; i ++) {
@@ -201,7 +194,7 @@ public class GUI extends JFrame {
 			int range = state.bars[i].max - state.bars[i].min;
 			int boxes = (state.bars[i].value - state.bars[i].min + range / 20) * 10 / range;
 			for (int j = 0; j < 10; j ++)
-				canvas.drawChar(x + 4 + j, y + i, (char) (j < boxes ? 200 : 198), (char) (j < boxes ? 4 : 7));
+				canvas.drawChar(x + 4 + j, y + i, j < boxes ? Tile.BOX_F4 : Tile.BOX_F2, (char) (j < boxes ? 4 : 7));
 		}
 	}
 
@@ -210,7 +203,7 @@ public class GUI extends JFrame {
 	}
 
 	public void drawBoxText(TextObject o) {
-		canvas.drawBox(o.pos.x, o.pos.y, o.width, o.height, BOX9, o.color);
+		canvas.drawBox(o.pos.x, o.pos.y, o.width, o.height, Tile.BOX9, o.color);
 		canvas.drawText(o.pos.x + 2, o.pos.y + 1, o.width - 4, o.height - 2, o.text, o.color);
 	}
 
@@ -220,14 +213,14 @@ public class GUI extends JFrame {
 			if (o.options[i].length > maxLength)
 				maxLength = o.options[i].length;
 		}
-		canvas.drawBox(o.pos.x, o.pos.y, maxLength + 8, o.options.length + 2, BOX9, o.color);
+		canvas.drawBox(o.pos.x, o.pos.y, maxLength + 8, o.options.length + 2, Tile.BOX9, o.color);
 		for (int i = 0; i < o.options.length; i ++) {
 			if (o.options[i].length == 0) {
 				for (int j = 0; j < maxLength + 6; j ++)
-					canvas.drawChar(o.pos.x + 1 + j, o.pos.y + 1 + i, (char) 208, o.color);
+					canvas.drawChar(o.pos.x + 1 + j, o.pos.y + 1 + i, Tile.HORIZONTAL_BAR, o.color);
 			} else {
 				if (i == o.selected)
-					canvas.drawChar(o.pos.x + 2, o.pos.y + 1 + i, (char) 193, o.color2);
+					canvas.drawChar(o.pos.x + 2, o.pos.y + 1 + i, Tile.ARROW_RT, o.color2);
 				canvas.drawText(o.pos.x + 4, o.pos.y + 1 + i, maxLength, 1, o.options[i], i == o.selected ? o.color2 : o.color);
 			}
 		}
@@ -235,8 +228,8 @@ public class GUI extends JFrame {
 
 	public void drawButtonGuide(char[][][] guide) {
 		for (int i = 0; i < MAP_WIDTH; i ++) {
-			canvas.drawChar(i, MAP_HEIGHT - 2, (char) 208, (char) 1);
-			canvas.drawChar(i, MAP_HEIGHT - 1, (char) 32, (char) 1);
+			canvas.drawChar(i, MAP_HEIGHT - 2, Tile.HORIZONTAL_BAR, (char) 1);
+			canvas.drawChar(i, MAP_HEIGHT - 1, ' ', (char) 1);
 		}
 		int x = 1;
 		for (int i = 0; i < guide[1].length; i ++) {

@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 
 public class Game {
 	public static final char[][][] GUIDE_MAIN = {
-		{{192, 193, 194, 195}, {90}, {65}},
+		{{Tile.ARROW_LT, Tile.ARROW_RT, Tile.ARROW_UP, Tile.ARROW_DN}, {'Z'}, {'A'}},
 		{
 			"Gerak".toCharArray(),
 			"Serang".toCharArray(),
@@ -15,7 +15,7 @@ public class Game {
 		}
 	};
 	public static final char[][][] GUIDE_MENU = {
-		{{194, 195}, {90}, {88}},
+		{{Tile.ARROW_UP, Tile.ARROW_DN}, {'Z'}, {'X'}},
 		{
 			"Ganti Pilihan".toCharArray(),
 			"Pilih".toCharArray(),
@@ -137,7 +137,6 @@ public class Game {
 
 	public void onKeyPressed(KeyEvent ev) {
 		int keyCode = ev.getKeyCode();
-		//System.out.println("key pressed: " + keyCode);
 		if (focus == 1) {
 			if (keyCode == 65) {
 				openLevelMenu();

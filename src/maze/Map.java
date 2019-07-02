@@ -5,12 +5,40 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+class Tile {
+	public static final char ICON_HP = 28;
+	public static final char ICON_MANA = 29;
+	public static final char ICON_FEMALE = 30;
+	public static final char ICON_MALE = 31;
+
+	public static final char BOX_F4 = 248;
+	public static final char BOX_F3 = 247;
+	public static final char BOX_F2 = 246;
+	public static final char BOX_F1 = 245;
+	public static final char BOX_F0 = 244;
+
+	public static final char ARROW_LT = 240;
+	public static final char ARROW_RT = 241;
+	public static final char ARROW_UP = 242;
+	public static final char ARROW_DN = 243;
+
+	public static final char HORIZONTAL_BAR = 255;
+
+	public static final char[] BOX9 = {
+			251, 249, 252,
+			250, ' ', 250,
+			253, 249, 254
+	};
+
+	public static final char[] LEVELTEXT = {'L', 27};
+}
+
 public class Map {
 	public static final int DS_SIZE = 5;
 	public static final int ROOM_SIZE = 16;
 
-	public static final char[] OBSTACLES = {200};
-	public static final char[] WALKABLE = {32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 46, 197};
+	public static final char[] OBSTACLES = {Tile.BOX_F4};
+	public static final char[] WALKABLE = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '.', Tile.BOX_F1};
 
 	public int width;
 	public int height;
