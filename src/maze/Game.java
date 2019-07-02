@@ -10,7 +10,7 @@ public class Game {
 		{{Tile.ARROW_LT, Tile.ARROW_RT, Tile.ARROW_UP, Tile.ARROW_DN}, {'Z'}, {'A'}},
 		{
 			"Gerak".toCharArray(),
-			"Serang".toCharArray(),
+			"Serang/Ambil".toCharArray(),
 			"Menu".toCharArray()
 		}
 	};
@@ -108,7 +108,7 @@ public class Game {
 		playerMenu.pos.x = 0;
 		playerMenu.pos.y = GUI.MAP_HEIGHT - 2 - 8;
 		playerMenu.options = new char[6][];
-		playerMenu.options[0] = "Pertarungan".toCharArray();
+		playerMenu.options[0] = "Menu".toCharArray();
 		playerMenu.options[1] = new char[0];
 		playerMenu.options[2] = "Status".toCharArray();
 		playerMenu.options[3] = "Jurus".toCharArray();
@@ -169,6 +169,10 @@ public class Game {
 			if (currentMenu != null) {
 				if (keyCode == 88) {
 					closeLevelMenu();
+				} else if (keyCode == 90) {
+					if (currentMenu.selected == currentMenu.options.length - 1) {
+						closeLevelMenu();
+					}
 				} else if (keyCode == 38) {
 					currentMenu.selected = ((currentMenu.options.length + currentMenu.selected - 5) % (currentMenu.options.length - 2)) + 2;
 					the_gui.draw();
