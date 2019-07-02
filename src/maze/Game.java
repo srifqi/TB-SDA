@@ -28,10 +28,13 @@ public class Game {
 		}
 	};
 
+	public static final int FLOORAMOUNT = 3;
+
 	public Random the_rand;
 	public Player the_player;
 	public GUI the_gui;
 	public InputHandler the_handler;
+	public ArrayList<Map> the_world;
 	public Map the_map;
 	public ArrayList<MenuObject> openedMenu;
 	public ArrayList<GameAction> focusMenu;
@@ -46,13 +49,16 @@ public class Game {
 		the_player.mana = rand.nextInt(the_player.maxmana + 1);
 		the_gui = new GUI();
 		the_handler = new InputHandler(this);
+		the_world = new ArrayList<Map>();
 		openedMenu = new ArrayList<MenuObject>();
 		focusMenu = new ArrayList<GameAction>();
 		guideMenu = new ArrayList<char[][][]>();
 	}
 
 	public boolean start() {
-		the_map = Map.createMap(the_rand);
+		for (int i = 0; i < FLOORAMOUNT; i ++)
+			the_world.add(Map.createMap(the_rand, i));
+		the_map = the_world.get(0);
 		the_player.pos.x = 3;
 		the_player.pos.y = 3;
 		openedMenu.removeAll(openedMenu);

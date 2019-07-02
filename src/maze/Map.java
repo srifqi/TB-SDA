@@ -31,6 +31,28 @@ class Tile {
 	};
 
 	public static final char[] LEVELTEXT = {'L', 27};
+
+	public static final char YOLO = 128;
+	public static final char COCKROACHES = 129;
+	public static final char CREAPER = 130;
+	public static final char DETROIT = 131;
+	public static final char KABUTO = 132;
+	public static final char LOLLIPOP = 133;
+	public static final char MUST_ROOM = 134;
+	public static final char PEA_SHOOT = 135;
+	public static final char POCO_POCO = 136;
+	public static final char RED_SNACK = 137;
+	public static final char SLIME = 138;
+
+	public static final char ASGARD = 144;
+	public static final char CHECKPOINT = 145;
+	public static final char DIAMOND = 146;
+	public static final char ENERGY = 147;
+	public static final char POTION = 148;
+	public static final char LEFT_GATE = 149;
+	public static final char RIGHT_GATE = 150;
+	public static final char BOTTOM_GATE = 151;
+	public static final char TOP_GATE = 152;
 }
 
 public class Map {
@@ -80,7 +102,7 @@ public class Map {
 		return false;
 	}
 
-	public static Map createMap(Random rand) {
+	public static Map createMap(Random rand, int floor) {
 		int[] DS = new int[DS_SIZE * DS_SIZE];
 		for (int i = 0; i < DS.length; i++)
 			DS[i] = -1;
