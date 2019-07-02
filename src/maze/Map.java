@@ -43,8 +43,7 @@ public class Map {
 	public int width;
 	public int height;
 	public char[][] data;
-	public ArrayList <Object> objects;
-
+	public ArrayList<Object> objects;
 	public char[] name;
 
 	public Map() {
@@ -83,25 +82,25 @@ public class Map {
 
 	public static Map createMap(Random rand) {
 		int[] DS = new int[DS_SIZE * DS_SIZE];
-		for (int i = 0; i < DS.length; i ++)
+		for (int i = 0; i < DS.length; i++)
 			DS[i] = -1;
 		Integer[][] edges = new Integer[2 * DS_SIZE * (DS_SIZE - 1)][3];
 		int edgeIndex = 0;
-		for (int y = 0; y < DS_SIZE; y ++) {
-		for (int x = 0; x < DS_SIZE; x ++) {
-			if (x > 0) {
-				edges[edgeIndex][0] = y * DS_SIZE + x - 1;
-				edges[edgeIndex][1] = y * DS_SIZE + x;
-				edges[edgeIndex][2] = rand.nextInt(Integer.MAX_VALUE);
-				edgeIndex ++;
+		for (int y = 0; y < DS_SIZE; y++) {
+			for (int x = 0; x < DS_SIZE; x++) {
+				if (x > 0) {
+					edges[edgeIndex][0] = y * DS_SIZE + x - 1;
+					edges[edgeIndex][1] = y * DS_SIZE + x;
+					edges[edgeIndex][2] = rand.nextInt(Integer.MAX_VALUE);
+					edgeIndex++;
+				}
+				if (y > 0) {
+					edges[edgeIndex][0] = (y - 1) * DS_SIZE + x;
+					edges[edgeIndex][1] = y * DS_SIZE + x;
+					edges[edgeIndex][2] = rand.nextInt(Integer.MAX_VALUE);
+					edgeIndex++;
+				}
 			}
-			if (y > 0) {
-				edges[edgeIndex][0] = (y - 1) * DS_SIZE + x;
-				edges[edgeIndex][1] = y * DS_SIZE + x;
-				edges[edgeIndex][2] = rand.nextInt(Integer.MAX_VALUE);
-				edgeIndex ++;
-			}
-		}
 		}
 		Comparator<Integer[]> CustomEdgeComparator = new Comparator<Integer[]>() {
 			public int compare(Integer[] A, Integer[] B) {
@@ -110,10 +109,32 @@ public class Map {
 		};
 		Arrays.sort(edges, CustomEdgeComparator);
 		Map newMap = new Map(DS_SIZE * ROOM_SIZE, DS_SIZE * ROOM_SIZE);
-		for (int i = 0; i < newMap.width; i ++)
-		for (int j = 0; j < newMap.height; j ++)
-			newMap.data[j][i] = OBSTACLES[rand.nextInt(OBSTACLES.length)];
-		for (int i = 0; i < edges.length; i ++) {
+		for (int i = 0; i < newMap.width; i++)
+			for (int j = 0; j < newMap.height; j++)
+				newMap.data[j][i] = OBSTACLES[rand.nextInt(OBSTACLES.length)];
+		Item tanggaUp = new Item(rand);
+		tanggaUp.name = "HP +10";
+		tanggaUp.icon = 'H';
+		tanggaUp.color = 3;
+		tanggaUp.pos.x = ROOM_SIZE * DS_SIZE - 4;
+		tanggaUp.pos.y = 3;
+		newMap.objects.add(tanggaUp);
+
+		Item tanggaDown = new Item(rand);
+		tanggaDown.name = "HP +10";
+		tanggaDown.icon = 'N';
+		tanggaDown.color = 3;
+		tanggaDown.pos.x = 3;
+		tanggaDown.pos.y = ROOM_SIZE * DS_SIZE - 4;
+		newMap.objects.add(tanggaDown);
+		
+		Item CheckPoint = new Item(rand);
+		CheckPoint.icon = 'C';
+		CheckPoint.color = 1;
+		CheckPoint.pos.x = 3;
+		CheckPoint.pos.y = 3;
+		newMap.objects.add(CheckPoint);
+		for (int i = 0; i < edges.length; i++) {
 			boolean unionSuccess = DSUnion(DS, edges[i][0], edges[i][1]);
 			if (unionSuccess) {
 				int staX = edges[i][0] % DS_SIZE;
@@ -121,37 +142,95 @@ public class Map {
 				int endX = edges[i][1] % DS_SIZE;
 				int endY = edges[i][1] / DS_SIZE;
 
-				Monster phip = new Monster(rand);
-				phip.pos.x = staX * ROOM_SIZE + 3 + rand.nextInt((staX + 1) * ROOM_SIZE - 6);
-				phip.pos.y = staY * ROOM_SIZE + 3 + rand.nextInt((staY + 1) * ROOM_SIZE - 6);
-				phip.HP = rand.nextInt(101);
-				phip.maxHP = rand.nextInt(101);
-				newMap.objects.add(phip);
+				Monster blackEye = new Monster(rand);
+				blackEye.name = "HP +10";
+				blackEye.icon = 'B';
+				blackEye.color = 6;
+				blackEye.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				blackEye.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				blackEye.HP = rand.nextInt(101);
+				blackEye.maxHP = rand.nextInt(101);
+				newMap.objects.add(blackEye);
 
 				Item k1 = new Item(rand);
 				k1.name = "HP +10";
-				k1.pos.x = staX * ROOM_SIZE + 4 + rand.nextInt((staX + 1) * ROOM_SIZE - 8);
-				k1.pos.y = staY * ROOM_SIZE + 4 + rand.nextInt((staY + 1) * ROOM_SIZE - 8);
+				k1.pos.x = staX * ROOM_SIZE + 4 + rand.nextInt(ROOM_SIZE - 8);
+				k1.pos.y = staY * ROOM_SIZE + 4 + rand.nextInt(ROOM_SIZE - 8);
 				newMap.objects.add(k1);
+				
+				Item Diamond = new Item(rand);
+				Diamond.icon = 'D';
+				Diamond.color = 7;
+				Diamond.pos.x = staX * ROOM_SIZE + 5 + rand.nextInt(ROOM_SIZE - 10);
+				Diamond.pos.y = staY * ROOM_SIZE + 5 + rand.nextInt(ROOM_SIZE - 10);
+				newMap.objects.add(Diamond);
+				
+				Item potion = new Item(rand);
+				potion.icon = 'P';
+				potion.color = 4;
+				potion.pos.x = staX * ROOM_SIZE + 6 + rand.nextInt(ROOM_SIZE - 12);
+				potion.pos.y = staY * ROOM_SIZE + 6 + rand.nextInt(ROOM_SIZE - 12);
+				newMap.objects.add(potion);
+				
+				Item Volatile = new Item(rand);
+				Volatile.icon = 'V';
+				Volatile.color = 5;
+				Volatile.pos.x = staX * ROOM_SIZE + 3 + rand.nextInt(ROOM_SIZE - 6);
+				Volatile.pos.y = staY * ROOM_SIZE + 3 + rand.nextInt(ROOM_SIZE - 6);
+				newMap.objects.add(Volatile);
 
-				for (int y = staY * ROOM_SIZE + 3; y < (staY + 1) * ROOM_SIZE - 3; y ++)
-				for (int x = staX * ROOM_SIZE + 3; x < (staX + 1) * ROOM_SIZE - 3; x ++)
-					newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
+				Item Energy = new Item(rand);
+				Energy.icon = 'E';
+				Energy.color = 9;
+				Energy.pos.x = staX * ROOM_SIZE + 3 + rand.nextInt(ROOM_SIZE - 6);
+				Energy.pos.y = staY * ROOM_SIZE + 3 + rand.nextInt(ROOM_SIZE - 6);
+				newMap.objects.add(Energy);
 
-				for (int y = endY * ROOM_SIZE + 3; y < (endY + 1) * ROOM_SIZE - 3; y ++)
-				for (int x = endX * ROOM_SIZE + 3; x < (endX + 1) * ROOM_SIZE - 3; x ++)
-					newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
+				for (int y = staY * ROOM_SIZE + 3; y < (staY + 1) * ROOM_SIZE - 3; y++)
+					for (int x = staX * ROOM_SIZE + 3; x < (staX + 1) * ROOM_SIZE - 3; x++)
+						newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
+
+				for (int y = endY * ROOM_SIZE + 3; y < (endY + 1) * ROOM_SIZE - 3; y++)
+					for (int x = endX * ROOM_SIZE + 3; x < (endX + 1) * ROOM_SIZE - 3; x++)
+						newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
 
 				if (staX == endX) {
-					for (int y = (staY + 1) * ROOM_SIZE - 3; y < endY * ROOM_SIZE + 3; y ++)
-					for (int x = staX * ROOM_SIZE + ROOM_SIZE / 2 - 1; x < staX * ROOM_SIZE + ROOM_SIZE / 2 + 1; x ++)
-						newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
+					for (int y = (staY + 1) * ROOM_SIZE - 3; y < endY * ROOM_SIZE + 3; y++)
+						for (int x = staX * ROOM_SIZE + ROOM_SIZE / 2 - 1; x < staX * ROOM_SIZE + ROOM_SIZE / 2
+								+ 1; x++)
+							newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
+					Item Gate1 = new Item(rand);
+					Gate1.icon = 'G';
+					Gate1.color = 8;
+					Gate1.pos.x = staX * ROOM_SIZE + ROOM_SIZE / 2 - 1;
+					Gate1.pos.y = (staX + 1) * ROOM_SIZE - 4;
+					newMap.objects.add(Gate1);
+					
+					Item Gate2 = new Item(rand);
+					Gate2.icon = 'G';
+					Gate2.color = 8;
+					Gate2.pos.x = staX * ROOM_SIZE + ROOM_SIZE / 2;
+					Gate2.pos.y = (staX + 1) * ROOM_SIZE - 4;
+					newMap.objects.add(Gate2);
 				}
 
 				if (staY == endY) {
-					for (int y = staY * ROOM_SIZE + ROOM_SIZE / 2 - 1; y < staY * ROOM_SIZE + ROOM_SIZE / 2 + 1; y ++)
-					for (int x = (staX + 1) * ROOM_SIZE - 3; x < endX * ROOM_SIZE + 3; x ++)
-						newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
+					for (int y = staY * ROOM_SIZE + ROOM_SIZE / 2 - 1; y < staY * ROOM_SIZE + ROOM_SIZE / 2 + 1; y++)
+						for (int x = (staX + 1) * ROOM_SIZE - 3; x < endX * ROOM_SIZE + 3; x++)
+							newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
+					Item Gate1 = new Item(rand);
+					Gate1.icon = 'G';
+					Gate1.color = 8;
+					Gate1.pos.x = (staY + 1) * ROOM_SIZE - 4;
+					Gate1.pos.y = staY * ROOM_SIZE + ROOM_SIZE / 2 - 1;
+					newMap.objects.add(Gate1);
+					
+					Item Gate2 = new Item(rand);
+					Gate2.icon = 'G';
+					Gate2.color = 8;
+					Gate2.pos.x = (staY + 1) * ROOM_SIZE - 4;
+					Gate2.pos.y = staY * ROOM_SIZE + ROOM_SIZE / 2;
+					newMap.objects.add(Gate2);
 				}
 			}
 		}

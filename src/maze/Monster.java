@@ -12,7 +12,5 @@ public class Monster extends Object {
 		HP = 0;
 		maxHP = 0;
 		type = ObjectType.MONSTER;
-		icon = 'M';
-		color = 2;
 	}
 }

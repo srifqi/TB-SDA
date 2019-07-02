@@ -102,7 +102,9 @@ public class GUI extends JFrame {
 				new Dimension(TILE_WIDTH, TILE_HEIGHT),
 				new Dimension(MAP_WIDTH, MAP_HEIGHT));
 		//             0            1            2          3             4            5           6              7
-		Color[] plt = {Color.BLACK, Color.WHITE, Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.LIGHT_GRAY};
+		Color[] plt = {Color.BLACK, Color.WHITE, Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.LIGHT_GRAY,
+		//			8			9
+				Color.ORANGE, Color.PINK};
 		canvas.setPalette(plt);
 
 		backgroundMapTranslation = new v2();
