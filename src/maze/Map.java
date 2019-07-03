@@ -376,16 +376,17 @@ public class Map {
 			for (int i = -1; i <= 1; i ++) {
 				if (i - j != 1 && j - i != 1)
 					continue;
-				v2 ngbr = new v2(cur.y + j, cur.x + i);
+				v2 ngbr = new v2(cur.x + i, cur.y + j);
 				int gScoreAlt = gScore[ngbr.y][ngbr.x] + cur.distToSq(ngbr);
 				boolean found = false;
-				for (int k = 0; k < open.size(); k ++) {
-					if (open.get(k).equals(ngbr)) {
+				for (int k = 0; k < done.size(); k ++) {
+					if (done.get(k).equals(ngbr)) {
 						found = true;
 						break;
 					}
 				}
-				if (!found)
+				if (!found && Map.isWalkable(_map.data[ngbr.y][ngbr.x]) &&
+						ngbr.distToSq(E) <= Game.SEARCHRADIUSSQ)
 					open.add(ngbr);
 				else if (gScoreAlt >= gScore[ngbr.y][ngbr.x])
 					continue;
@@ -400,7 +401,9 @@ public class Map {
 
 	public static v2 nextMovement(v2[][] prev, v2 start, v2 end) {
 		v2 cur = end;
-		while (!prev[cur.y][cur.x].equals(start))
+		if (prev.length <= 0)
+			return cur;
+		while (!prev[cur.y][cur.x].equals(start) && prev[cur.y][cur.x].x >= 0 && prev[cur.y][cur.x].y >= 0)
 			cur = prev[cur.y][cur.x];
 		return cur;
 	}
