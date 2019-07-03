@@ -13,4 +13,8 @@ public class Monster extends Object {
 		maxHP = 0;
 		type = ObjectType.MONSTER;
 	}
+
+	public void moveTo(Map map, v2 target) {
+		pos = Map.nextMovement(Map.AStar(map, pos, target), pos, target);
+	}
 }

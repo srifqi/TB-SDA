@@ -33,6 +33,7 @@ class Tile {
 	public static final char[] LEVELTEXT = {'L', 27};
 
 	public static final char YOLO = 128;
+
 	public static final char COCKROACHES = 129;
 	public static final char CREAPER = 130;
 	public static final char DETROIT = 131;
@@ -257,5 +258,69 @@ public class Map {
 			}
 		}
 		return newMap;
+	}
+
+	public static v2[][] AStar(Map _map, v2 S, v2 E) {
+		ArrayList<v2> done = new ArrayList<v2>();
+		ArrayList<v2> open = new ArrayList<v2>();
+		v2[][] prev = new v2[_map.height][_map.width];
+		int[][] fScore = new int[_map.height][_map.width];
+		int[][] gScore = new int[_map.height][_map.width];
+		for (int i = 0; i < _map.width * _map.height; i ++) {
+			prev[i / _map.width][i % _map.width] = new v2(-1, -1);
+			fScore[i / _map.width][i % _map.width] = Integer.MAX_VALUE;
+			gScore[i / _map.width][i % _map.width] = Integer.MAX_VALUE;
+		}
+		fScore[S.y][S.x] = S.distToSq(E);
+		gScore[S.y][S.x] = 0;
+		open.add(S);
+		while (!open.isEmpty()) {
+			int curIndex = -1;
+			int fScoreMin = Integer.MAX_VALUE;
+			for (int i = 0; i < open.size(); i ++) {
+				v2 oi = open.get(i);
+				if (fScore[oi.y][oi.x] < fScoreMin) {
+					fScoreMin = fScore[oi.y][oi.x];
+					curIndex = i;
+				}
+			}
+			if (curIndex < 0)
+				break;
+			v2 cur = open.get(curIndex);
+			if (cur.equals(E))
+				return prev;
+			open.remove(curIndex);
+			done.add(cur);
+			for (int j = -1; j <= 1; j ++) {
+			for (int i = -1; i <= 1; i ++) {
+				if (i - j != 1 && j - i != 1)
+					continue;
+				v2 ngbr = new v2(cur.y + j, cur.x + i);
+				int gScoreAlt = gScore[ngbr.y][ngbr.x] + cur.distToSq(ngbr);
+				boolean found = false;
+				for (int k = 0; k < open.size(); k ++) {
+					if (open.get(k).equals(ngbr)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+					open.add(ngbr);
+				else if (gScoreAlt >= gScore[ngbr.y][ngbr.x])
+					continue;
+				prev[ngbr.y][ngbr.x] = cur;
+				gScore[ngbr.y][ngbr.x] = gScoreAlt;
+				fScore[ngbr.y][ngbr.x] = gScoreAlt + ngbr.distToSq(E);
+			}
+			}
+		}
+		return new v2[0][0];
+	}
+
+	public static v2 nextMovement(v2[][] prev, v2 start, v2 end) {
+		v2 cur = end;
+		while (!prev[cur.y][cur.x].equals(start))
+			cur = prev[cur.y][cur.x];
+		return cur;
 	}
 }
