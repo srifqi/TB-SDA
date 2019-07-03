@@ -103,7 +103,7 @@ public class GUI extends JFrame {
 	public v2 backgroundMapTranslation;
 	private int backgroundMapLimit = 0;
 	private char[][][] guideList;
-	private ArrayList<DrawObject> drawList;
+	public ArrayList<DrawObject> drawList;
 
 	public GUI() {
 		Toolkit tk = Toolkit.getDefaultToolkit();
