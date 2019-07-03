@@ -18,7 +18,7 @@ public class v2 {
 		return (target.x == x) && (target.y == y);
 	}
 
-	public double distToSq(v2 target) {
+	public int distToSq(v2 target) {
 		return (target.x - x) * (target.x - x) +
 				(target.y - y) * (target.y - y);
 	}
