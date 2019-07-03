@@ -49,10 +49,12 @@ class TextObject extends DrawObject {
 	public int height;
 	public char[] text;
 	public char color;
+	public boolean wrapped;
 
 	public TextObject() {
 		super();
 		type = DrawType.TEXT;
+		wrapped = false;
 	}
 }
 
@@ -206,7 +208,10 @@ public class GUI extends JFrame {
 
 	public void drawBoxText(TextObject o) {
 		canvas.drawBox(o.pos.x, o.pos.y, o.width, o.height, Tile.BOX9, o.color);
-		canvas.drawText(o.pos.x + 2, o.pos.y + 1, o.width - 4, o.height - 2, o.text, o.color);
+		if (o.wrapped)
+			canvas.drawWrapText(o.pos.x + 2, o.pos.y + 1, o.width - 4, o.height - 2, o.text, o.color);
+		else
+			canvas.drawText(o.pos.x + 2, o.pos.y + 1, o.width - 4, o.height - 2, o.text, o.color);
 	}
 
 	public void drawBoxMenu(MenuObject o) {

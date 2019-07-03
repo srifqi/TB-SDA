@@ -135,6 +135,42 @@ public class RenderCanvas extends JPanel {
 		}
 	}
 
+	public void drawWrapText(int x, int y, int w, int h, char[] text, char color) {
+		int sX = x < 0 ? 0 : x;
+		int sY = y < 0 ? 0 : y;
+		int eX = x + w > map.width ? map.width : x + w;
+		int eY = y + h > map.height ? map.height : y + h;
+		String[] words = new String(text).split(" ");
+		int wordIndex = 0;
+		for (int j = sY; j < eY; j ++) {
+			int lineWidth = 0;
+			int i = sX;
+			if (wordIndex >= words.length)
+				break;
+			int curLineWidth = words[wordIndex].length();
+			if (wordIndex < words.length - 1)
+				curLineWidth ++;
+			while (true) {
+				lineWidth += words[wordIndex].length() + 1;
+				int p = 0;
+				i ++;
+				char[] word = words[wordIndex].toCharArray();
+				for (; i < eX && p < words[wordIndex].length(); i ++, p ++) {
+					colorMap.data[j][i] = color;
+					map.data[j][i] = word[p];
+				}
+				wordIndex ++;
+				if (wordIndex >= words.length)
+					break;
+				curLineWidth += words[wordIndex].length();
+				if (wordIndex < words.length - 1)
+					curLineWidth ++;
+				if (curLineWidth >= w)
+					break;
+			}
+		}
+	}
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		setBackground(Color.BLACK);
