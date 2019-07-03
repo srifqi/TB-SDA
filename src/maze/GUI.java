@@ -10,7 +10,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 enum DrawType {
-	MENU, CHARACTER, TEXT, STATUS
+	MENU, DATAINT, CHARACTER, TEXT, STATUS
 }
 
 class DrawObject {
@@ -31,6 +31,15 @@ class MenuObject extends DrawObject {
 	public MenuObject() {
 		super();
 		type = DrawType.MENU;
+	}
+}
+
+class DataIntObject extends MenuObject {
+	public int[] dataInt;
+
+	public DataIntObject() {
+		super();
+		type = DrawType.DATAINT;
 	}
 }
 
