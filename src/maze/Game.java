@@ -78,7 +78,7 @@ public class Game {
 		CharacterObject playerObject = new CharacterObject();
 		playerObject.pos.x = GUI.MAP_WIDTH / 2;
 		playerObject.pos.y = GUI.MAP_HEIGHT / 2;
-		playerObject.character = 'X';
+		playerObject.character = Tile.YOLO;
 		playerObject.color = 3;
 		the_gui.addObject(playerObject);
 		String levelName = NameRandomizer.next(the_rand, 10) + " L" + (1 + the_rand.nextInt(9));

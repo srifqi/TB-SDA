@@ -6,7 +6,5 @@ public class Item extends Object {
 	public Item(Random rand) {
 		super();
 		type = ObjectType.ITEM;
-		icon = 'I';
-		color = 6;
 	}
 }

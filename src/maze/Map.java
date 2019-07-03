@@ -44,7 +44,7 @@ class Tile {
 	public static final char POCO_POCO = 136;
 	public static final char RED_SNACK = 137;
 	public static final char SLIME = 138;
-
+ 
 	public static final char ASGARD = 144;
 	public static final char CHECKPOINT = 145;
 	public static final char DIAMOND = 146;
@@ -136,7 +136,7 @@ public class Map {
 			for (int j = 0; j < newMap.height; j++)
 				newMap.data[j][i] = OBSTACLES[rand.nextInt(OBSTACLES.length)];
 		Item tanggaUp = new Item(rand);
-		tanggaUp.name = "HP +10";
+		tanggaUp.name = "TanggaNaik";
 		tanggaUp.icon = 'H';
 		tanggaUp.color = 3;
 		tanggaUp.pos.x = ROOM_SIZE * DS_SIZE - 4;
@@ -144,7 +144,7 @@ public class Map {
 		newMap.objects.add(tanggaUp);
 
 		Item tanggaDown = new Item(rand);
-		tanggaDown.name = "HP +10";
+		tanggaDown.name = "TanggaTurun";
 		tanggaDown.icon = 'N';
 		tanggaDown.color = 3;
 		tanggaDown.pos.x = 3;
@@ -152,11 +152,12 @@ public class Map {
 		newMap.objects.add(tanggaDown);
 		
 		Item CheckPoint = new Item(rand);
-		CheckPoint.icon = 'C';
+		CheckPoint.icon = Tile.CHECKPOINT;
 		CheckPoint.color = 1;
 		CheckPoint.pos.x = 3;
 		CheckPoint.pos.y = 3;
 		newMap.objects.add(CheckPoint);
+
 		for (int i = 0; i < edges.length; i++) {
 			boolean unionSuccess = DSUnion(DS, edges[i][0], edges[i][1]);
 			if (unionSuccess) {
@@ -165,45 +166,125 @@ public class Map {
 				int endX = edges[i][1] % DS_SIZE;
 				int endY = edges[i][1] / DS_SIZE;
 
-				Monster blackEye = new Monster(rand);
-				blackEye.name = "HP +10";
-				blackEye.icon = 'B';
-				blackEye.color = 6;
-				blackEye.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
-				blackEye.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
-				blackEye.HP = rand.nextInt(101);
-				blackEye.maxHP = rand.nextInt(101);
-				newMap.objects.add(blackEye);
+				Monster Lolipop = new Monster(rand);
+				Lolipop.icon = Tile.LOLLIPOP;
+				Lolipop.color = 9;
+				Lolipop.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Lolipop.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Lolipop.HP = rand.nextInt(101);
+				Lolipop.maxHP = rand.nextInt(101);
 
-				Item k1 = new Item(rand);
-				k1.name = "HP +10";
-				k1.pos.x = staX * ROOM_SIZE + 4 + rand.nextInt(ROOM_SIZE - 8);
-				k1.pos.y = staY * ROOM_SIZE + 4 + rand.nextInt(ROOM_SIZE - 8);
-				newMap.objects.add(k1);
-				
+				Monster Mushroom = new Monster(rand);
+				Mushroom.icon = Tile.MUST_ROOM;
+				Mushroom.color = 8;
+				Mushroom.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Mushroom.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Mushroom.HP = rand.nextInt(101);
+				Mushroom.maxHP = rand.nextInt(101);
+
+				Monster Poco = new Monster(rand);
+				Poco.icon = Tile.POCO_POCO;
+				Poco.color = 7;
+				Poco.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Poco.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Poco.HP = rand.nextInt(101);
+				Poco.maxHP = rand.nextInt(101);
+
+				Monster Slime = new Monster(rand);
+				Slime.icon = Tile.SLIME;
+				Slime.color = 3;
+				Slime.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Slime.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Slime.HP = rand.nextInt(101);
+				Slime.maxHP = rand.nextInt(101);
+
+				Monster Detroit = new Monster(rand);
+				Detroit.icon = Tile.DETROIT;
+				Detroit.color = 9;
+				Detroit.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Detroit.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Detroit.HP = rand.nextInt(101);
+				Detroit.maxHP = rand.nextInt(101);
+
+				Monster Peashooter = new Monster(rand);;
+				Peashooter.icon = Tile.PEA_SHOOT;
+				Peashooter.color = 6;
+				Peashooter.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Peashooter.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Peashooter.HP = rand.nextInt(101);
+				Peashooter.maxHP = rand.nextInt(101);
+
+				Monster Creaper = new Monster(rand);
+				Creaper.icon = Tile.CREAPER;
+				Creaper.color = 8;
+				Creaper.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Creaper.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Creaper.HP = rand.nextInt(101);
+				Creaper.maxHP = rand.nextInt(101);
+
+				Monster Kabuto = new Monster(rand);
+				Kabuto.icon = Tile.KABUTO;
+				Kabuto.color = 6;
+				Kabuto.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Kabuto.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Kabuto.HP = rand.nextInt(101);
+				Kabuto.maxHP = rand.nextInt(101);
+
+				Monster Cockroacker = new Monster(rand);
+				Cockroacker.icon = Tile.COCKROACHES;
+				Cockroacker.color = 5;
+				Cockroacker.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Cockroacker.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				Cockroacker.HP = rand.nextInt(101);
+				Cockroacker.maxHP = rand.nextInt(101);
+
+				Monster RedSnack = new Monster(rand);
+				RedSnack.icon = Tile.RED_SNACK;
+				RedSnack.color = 2;
+				RedSnack.pos.x = staX * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				RedSnack.pos.y = staY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE - 6));
+				RedSnack.HP = rand.nextInt(101);
+				RedSnack.maxHP = rand.nextInt(101);
+
+				if (floor == 0) {
+					newMap.objects.add(Lolipop);
+					newMap.objects.add(Mushroom);
+					newMap.objects.add(Poco);
+				} else if (floor == 1) {
+					newMap.objects.add(Slime);
+					newMap.objects.add(Peashooter);
+					newMap.objects.add(Detroit);
+				} else if (floor == 2) {
+					newMap.objects.add(Creaper);
+					newMap.objects.add(Kabuto);
+					newMap.objects.add(Cockroacker);
+				} else if (floor == 3) {
+					newMap.objects.add(RedSnack);
+				}
+
 				Item Diamond = new Item(rand);
-				Diamond.icon = 'D';
+				Diamond.icon = Tile.DIAMOND;
 				Diamond.color = 7;
 				Diamond.pos.x = staX * ROOM_SIZE + 5 + rand.nextInt(ROOM_SIZE - 10);
 				Diamond.pos.y = staY * ROOM_SIZE + 5 + rand.nextInt(ROOM_SIZE - 10);
 				newMap.objects.add(Diamond);
-				
+
 				Item potion = new Item(rand);
-				potion.icon = 'P';
+				potion.icon = Tile.POTION;
 				potion.color = 4;
 				potion.pos.x = staX * ROOM_SIZE + 6 + rand.nextInt(ROOM_SIZE - 12);
 				potion.pos.y = staY * ROOM_SIZE + 6 + rand.nextInt(ROOM_SIZE - 12);
 				newMap.objects.add(potion);
-				
+
 				Item Volatile = new Item(rand);
-				Volatile.icon = 'V';
+				Volatile.icon = Tile.ASGARD;
 				Volatile.color = 5;
 				Volatile.pos.x = staX * ROOM_SIZE + 3 + rand.nextInt(ROOM_SIZE - 6);
 				Volatile.pos.y = staY * ROOM_SIZE + 3 + rand.nextInt(ROOM_SIZE - 6);
 				newMap.objects.add(Volatile);
 
 				Item Energy = new Item(rand);
-				Energy.icon = 'E';
+				Energy.icon = Tile.ENERGY;
 				Energy.color = 9;
 				Energy.pos.x = staX * ROOM_SIZE + 3 + rand.nextInt(ROOM_SIZE - 6);
 				Energy.pos.y = staY * ROOM_SIZE + 3 + rand.nextInt(ROOM_SIZE - 6);
@@ -223,14 +304,14 @@ public class Map {
 								+ 1; x++)
 							newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
 					Item Gate1 = new Item(rand);
-					Gate1.icon = 'G';
+					Gate1.icon = Tile.TOP_GATE;
 					Gate1.color = 8;
 					Gate1.pos.x = staX * ROOM_SIZE + ROOM_SIZE / 2 - 1;
 					Gate1.pos.y = (staX + 1) * ROOM_SIZE - 4;
 					newMap.objects.add(Gate1);
 					
 					Item Gate2 = new Item(rand);
-					Gate2.icon = 'G';
+					Gate2.icon = Tile.BOTTOM_GATE;
 					Gate2.color = 8;
 					Gate2.pos.x = staX * ROOM_SIZE + ROOM_SIZE / 2;
 					Gate2.pos.y = (staX + 1) * ROOM_SIZE - 4;
@@ -242,14 +323,14 @@ public class Map {
 						for (int x = (staX + 1) * ROOM_SIZE - 3; x < endX * ROOM_SIZE + 3; x++)
 							newMap.data[y][x] = WALKABLE[rand.nextInt(WALKABLE.length)];
 					Item Gate1 = new Item(rand);
-					Gate1.icon = 'G';
+					Gate1.icon = Tile.LEFT_GATE;
 					Gate1.color = 8;
 					Gate1.pos.x = (staY + 1) * ROOM_SIZE - 4;
 					Gate1.pos.y = staY * ROOM_SIZE + ROOM_SIZE / 2 - 1;
 					newMap.objects.add(Gate1);
 					
 					Item Gate2 = new Item(rand);
-					Gate2.icon = 'G';
+					Gate2.icon = Tile.RIGHT_GATE;
 					Gate2.color = 8;
 					Gate2.pos.x = (staY + 1) * ROOM_SIZE - 4;
 					Gate2.pos.y = staY * ROOM_SIZE + ROOM_SIZE / 2;
