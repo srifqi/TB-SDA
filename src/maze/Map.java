@@ -87,6 +87,13 @@ public class Map {
 		return false;
 	}
 
+	public boolean isThereObject(v2 coord) {
+		for (Object i : objects)
+			if (i.pos.equals(coord))
+				return true;
+		return false;
+	}
+
 	private static int DSFind(int[] DS, int i) {
 		while (DS[i] != -1)
 			i = DS[i];
