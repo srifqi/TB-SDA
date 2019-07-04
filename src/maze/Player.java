@@ -8,8 +8,6 @@ public class Player extends Object {
 	public GenderType gender;
 	public int maxHP;
 	public int HP;
-	public int maxMana;
-	public int mana;
 	public int ATK;
 	public int DEF;
 	public int[] IV;
@@ -31,7 +29,6 @@ public class Player extends Object {
 		updateLevel(_level);
 		EXP = getEXPAtLevel(level);
 		HP = maxHP;
-		mana = maxMana;
 		bag = new ArrayList<Character>();
 	}
 
@@ -40,7 +37,6 @@ public class Player extends Object {
 		ATK = (((2 * 25 + IV[0] * level) / 100) + 5) * 1;
 		DEF = (((2 * 30 + IV[1] * level) / 100) + 5) * 1;
 		maxHP = ((2 * 75 + IV[2] * level) / 100) + level + 10;
-		maxMana = ((3 * 70 + IV[2] * level) / 100) + level + 10;
 	}
 
 	public static int getEXPAtLevel(int n) {
@@ -107,22 +103,15 @@ public class Player extends Object {
 		plyrStatHP.value = HP;
 		plyrStatHP.min = 0;
 		plyrStatHP.max = maxHP;
-		ProgressBar plyrStatMana = new ProgressBar();
-		plyrStatMana.icon = 29;
-		plyrStatMana.color = 3;
-		plyrStatMana.value = mana;
-		plyrStatMana.min = 0;
-		plyrStatMana.max = maxMana;
 		ProgressBar plyrStatEXP = new ProgressBar();
 		plyrStatEXP.icon = 'E';
 		plyrStatEXP.color = 3;
 		plyrStatEXP.value = EXP;
 		plyrStatEXP.min = getEXPAtLevel(level);
 		plyrStatEXP.max = getEXPAtLevel(level + 1);
-		playerStat.bars = new ProgressBar[3];
+		playerStat.bars = new ProgressBar[2];
 		playerStat.bars[0] = plyrStatHP;
-		playerStat.bars[1] = plyrStatMana;
-		playerStat.bars[2] = plyrStatEXP;
+		playerStat.bars[1] = plyrStatEXP;
 		return playerStat;
 	}
 }

@@ -8,7 +8,6 @@ public class Text {
 	public static final String SELECT = "Ganti Pilihan";
 	public static final String CHOOSE = "Pilih";
 	public static final String STATUS = "Status";
-	public static final String JUTSU = "Jurus";
 	public static final String OPENBAG = "Buka Tas";
 	public static final String BAG = "Tas";
 	public static final String BAGEMPTY = "Tas kosong.";

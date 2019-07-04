@@ -265,13 +265,12 @@ public class Game {
 	public boolean openLevelMenu() {
 		MenuObject playerMenu = new MenuObject();
 		playerMenu.pos.x = 0;
-		playerMenu.pos.y = GUI.MAP_HEIGHT - 9;
-		playerMenu.options = new char[5][];
+		playerMenu.pos.y = GUI.MAP_HEIGHT - 8;
+		playerMenu.options = new char[4][];
 		playerMenu.options[0] = Text.MENU.toCharArray();
 		playerMenu.options[1] = new char[0];
-		playerMenu.options[2] = Text.JUTSU.toCharArray();
-		playerMenu.options[3] = Text.OPENBAG.toCharArray();
-		playerMenu.options[4] = Text.BACK.toCharArray();
+		playerMenu.options[2] = Text.OPENBAG.toCharArray();
+		playerMenu.options[3] = Text.BACK.toCharArray();
 		playerMenu.selected = 2;
 		playerMenu.color = 1;
 		playerMenu.color2 = 3;
@@ -424,7 +423,7 @@ public class Game {
 			} else if (keyCode == 90) {
 				if (currentMenu.selected == currentMenu.options.length - 1) {
 					closeLevelMenu();
-				} else if (currentMenu.selected == 3) {
+				} else if (currentMenu.selected == 2) {
 					openBagScreen();
 				}
 			} else if (keyCode == 38) {
