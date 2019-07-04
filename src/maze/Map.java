@@ -202,55 +202,50 @@ public class Map {
 				int chsY = itemPlaced[edges[i][0]] ? endY : staY;
 				itemPlaced[edges[i][0]] = true;
 
-				Monster Lolipop = new Monster(rand, Monster.LOLLIPOP, rand.nextInt(5) + 5);
+				Monster Lolipop = new Monster(rand, Monster.LOLLIPOP, 10 + rand.nextInt(11));
 				Lolipop.color = 9;
 				Lolipop.pos.x = chsX * ROOM_SIZE + 5;
 				Lolipop.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
-				Monster Mushroom = new Monster(rand, Monster.MUST_ROOM, rand.nextInt(5) + 5);
+				Monster Mushroom = new Monster(rand, Monster.MUST_ROOM, 10 + rand.nextInt(11));
 				Mushroom.color = 8;
 				Mushroom.pos.x = chsX * ROOM_SIZE + 7;
 				Mushroom.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
-				Monster Poco = new Monster(rand, Monster.POCO_POCO, rand.nextInt(5) + 5);
+				Monster Poco = new Monster(rand, Monster.POCO_POCO, 10 + rand.nextInt(11));
 				Poco.color = 7;
 				Poco.pos.x = chsX * ROOM_SIZE + 9;
 				Poco.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
-				Monster Slime = new Monster(rand, Monster.SLIME, rand.nextInt(10) + 5);
+				Monster Slime = new Monster(rand, Monster.SLIME, 21 + rand.nextInt(10));
 				Slime.color = 3;
 				Slime.pos.x = chsX * ROOM_SIZE + 5;
 				Slime.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
-				Monster Detroit = new Monster(rand, Monster.DETROIT, rand.nextInt(10) + 5);
+				Monster Detroit = new Monster(rand, Monster.DETROIT, 21 + rand.nextInt(10));
 				Detroit.color = 9;
 				Detroit.pos.x = chsX * ROOM_SIZE + 7;
 				Detroit.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
-				Monster Peashooter = new Monster(rand, Monster.PEA_SHOOT, rand.nextInt(10) + 5);
+				Monster Peashooter = new Monster(rand, Monster.PEA_SHOOT, 21 + rand.nextInt(10));
 				Peashooter.color = 6;
 				Peashooter.pos.x = chsX * ROOM_SIZE + 9;
 				Peashooter.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
-				Monster Creaper = new Monster(rand, Monster.CREAPER, rand.nextInt(15) + 5);
+				Monster Creaper = new Monster(rand, Monster.CREAPER, 30 + rand.nextInt(11));
 				Creaper.color = 8;
 				Creaper.pos.x = chsX * ROOM_SIZE + 5;
 				Creaper.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
-				Monster Kabuto = new Monster(rand, Monster.KABUTO, rand.nextInt(15) + 5);
+				Monster Kabuto = new Monster(rand, Monster.KABUTO, 30 + rand.nextInt(11));
 				Kabuto.color = 6;
 				Kabuto.pos.x = chsX * ROOM_SIZE + 7;
 				Kabuto.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
-				Monster Cockroacker = new Monster(rand, Monster.COCKROACHES, rand.nextInt(15) + 5);
+				Monster Cockroacker = new Monster(rand, Monster.COCKROACHES, 30 + rand.nextInt(11));
 				Cockroacker.color = 5;
 				Cockroacker.pos.x = chsX * ROOM_SIZE + 9;
 				Cockroacker.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
-
-				Monster RedSnack = new Monster(rand, Monster.RED_SNACK, rand.nextInt(30) + 5);
-				RedSnack.color = 2;
-				RedSnack.pos.x = chsX * ROOM_SIZE + 7;
-				RedSnack.pos.y = chsY * ROOM_SIZE + 3 + (rand.nextInt(ROOM_SIZE / 2 - 3));
 
 				if (floor == 0) {
 					newMap.objects.add(Lolipop);
@@ -258,14 +253,12 @@ public class Map {
 					newMap.objects.add(Poco);
 				} else if (floor == 1) {
 					newMap.objects.add(Slime);
-					newMap.objects.add(Peashooter);
 					newMap.objects.add(Detroit);
+					newMap.objects.add(Peashooter);
 				} else if (floor == 2) {
 					newMap.objects.add(Creaper);
 					newMap.objects.add(Kabuto);
 					newMap.objects.add(Cockroacker);
-				} else if (floor == 3) {
-					newMap.objects.add(RedSnack);
 				}
 
 				Item Diamond = new Item(Item.DIAMOND);
@@ -321,6 +314,19 @@ public class Map {
 				}
 			}
 		}
+		return newMap;
+	}
+
+	public static Map createBossMap(Random rand) {
+		Map newMap = new Map(3 * ROOM_SIZE, ROOM_SIZE);
+		for (int i = 0; i < newMap.width; i++)
+		for (int j = 0; j < newMap.height; j++)
+			newMap.data[j][i] = WALKABLE[rand.nextInt(WALKABLE.length)];
+		Monster RedSnack = new Monster(rand, Monster.RED_SNACK, 50);
+		RedSnack.color = 2;
+		RedSnack.pos.x = ROOM_SIZE / 2;
+		RedSnack.pos.y = ROOM_SIZE / 2;
+		newMap.objects.add(RedSnack);
 		return newMap;
 	}
 

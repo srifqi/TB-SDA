@@ -55,9 +55,11 @@ public class RenderCanvas extends JPanel {
 			screenPos.y = j;
 			pos.x = i - translation.x;
 			pos.y = j - translation.y;
-			if (pos.x >= 0 && pos.x < _map.width && pos.y >= 0 && pos.y < _map.height &&
-					limit > 0 && screenPos.distToSq(mid) <= limitSq) {
-				map.data[j][i] = _map.data[pos.y][pos.x];
+			if (limit > 0 && screenPos.distToSq(mid) <= limitSq) {
+				if (pos.x >= 0 && pos.x < _map.width && pos.y >= 0 && pos.y < _map.height)
+					map.data[j][i] = _map.data[pos.y][pos.x];
+				else
+					map.data[j][i] = Map.OBSTACLES[0];
 			} else {
 				map.data[j][i] = 0;
 			}
@@ -125,12 +127,21 @@ public class RenderCanvas extends JPanel {
 		int sY = y < 0 ? 0 : y;
 		int eX = x + w > map.width ? map.width : x + w;
 		int eY = y + h > map.height ? map.height : y + h;
+		int padd = 0;
 		for (int j = sY; j < eY; j ++) {
 		for (int i = sX; i < eX; i ++) {
 			colorMap.data[j][i] = color;
-			int idx = (j - y) * w + i - x;
-			if (idx < text.length)
-				map.data[j][i] = text[idx];
+			int idx = (j - y) * w + i - x - padd;
+			if (idx < text.length) {
+				if (text[idx] == '\n') {
+					padd += w - i + x - 1;
+					j ++;
+					i = sX - 1;
+				} else {
+					map.data[j][i] = text[idx];
+				}
+				
+			}
 		}
 		}
 	}

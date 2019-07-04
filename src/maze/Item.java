@@ -15,12 +15,12 @@ public class Item extends Object {
 	public static final char UP_LADDER = 9;
 	public static final char DOWN_LADDER = 10;
 
-	public int ID;
+	public char ID;
 
-	public Item(int _ID) {
+	public Item(char _ID) {
 		super();
 		type = ObjectType.ITEM;
-		icon = (char) (Tile.ASGARD + _ID);
+		icon = (char) (Tile.ASGARD + _ID); // type-casting becacuse of the operator
 		color = 6;
 		ID = _ID;
 		name = Text.ITEMS[ID];

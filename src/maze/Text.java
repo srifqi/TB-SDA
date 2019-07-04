@@ -25,15 +25,15 @@ public class Text {
 		"Virus kacang Gout", "Bisa Bakar Wong Solo", "Lendir Alteco"
 	};
 	public static final String[] ITEMS = {
-		"Asgard", "Checkpoint", "Berlian", "Pil Mana", "Penawar", "Gerbang",
+		"Asgard", "Checkpoint", "Berlian", "Penawar Super", "Penawar", "Gerbang",
 		"Gerbang", "Gerbang", "Gerbang", "Tangga Naik", "Tangga Turun"
 	};
 	public static final String[] ITEMDESCS = {
-		"Item unik yang tersebar di dalam perut bumi akibat peperangan di Asgard. Mampu menambah HP dan Mana hero sehingga penuh kembali.",
+		"Item unik yang tersebar di dalam perut bumi akibat peperangan di Asgard. Mampu menambah HP hero sehingga penuh kembali.",
 		"Batu permata yang terbuat dari perut bumi dan memiliki kekuatan yang dahsyat. Ketika mati, hero akan kembali ke checkpoint terakhir.",
-		"Makanan Cacing Besar Alaska ini dapat menaikkan levelmu. Menambah EXP hero sebanyak 100.",
-		"Gabungan rempah yang teracik secara alami yang terbuat dari temulawak, jahe, dan minyak zaitun. Menambah Mana hero sebanyak 50% dari HP maksimum.",
-		"Sumber mata air yang memancarkan air suci dari dalam perut bumi. Menambah HP hero sebanyak 50% dari HP maksimum.",
+		"Makanan Cacing Besar Alaska ini dapat menaikkan levelmu. Menambah EXP hero sebanyak 100 poin.",
+		"Gabungan rempah yang teracik secara alami yang terbuat dari temulawak, jahe, dan minyak zaitun. Menambah HP hero sebanyak 50% dari HP maksimum.",
+		"Sumber mata air yang memancarkan air suci dari dalam perut bumi. Menambah HP hero sebanyak 25% dari HP maksimum.",
 		"Merupakan pintu yang terbuat dari gabungan platinum, besi, dan minyak bumi. Pintu ini dapat dibelasah.",
 		"Merupakan pintu yang terbuat dari gabungan platinum, besi, dan minyak bumi. Pintu ini dapat dibelasah.",
 		"Merupakan pintu yang terbuat dari gabungan platinum, besi, dan minyak bumi. Pintu ini dapat dibelasah.",

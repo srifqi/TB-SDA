@@ -58,11 +58,11 @@ public class Monster extends Object {
 			pos = nextPos;
 	}
 
-	public void attack(Player foe) {
+	public int attack(Player foe) {
 		int attackPower = ULTISTATS[species];
 		int damage = (((2 * level / 5) + 2) * attackPower * ATK / foe.DEF / 50) + 2;
 		foe.HP -= damage;
-		System.out.println(name + " attacks with " + damage + " HP. " + foe.name + " has " + foe.HP + " HP now.");
+		return damage;
 	}
 
 	public StateObject getStateObject() {

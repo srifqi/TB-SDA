@@ -13,7 +13,7 @@ public class Player extends Object {
 	public int ATK;
 	public int DEF;
 	public int[] IV;
-	public ArrayList<Integer> bag;
+	public ArrayList<Character> bag;
 	public int EXP;
 
 	public Player(Random rand, int _level) {
@@ -32,7 +32,7 @@ public class Player extends Object {
 		EXP = getEXPAtLevel(level);
 		HP = maxHP;
 		mana = maxMana;
-		bag = new ArrayList<Integer>();
+		bag = new ArrayList<Character>();
 	}
 
 	public void updateLevel(int _level) {
@@ -52,11 +52,28 @@ public class Player extends Object {
 	}
 
 	public void useItem(int itemIndex) {
+		switch (bag.get(itemIndex)) {
+			case Item.ASGARD:
+				updateLevel(level + 1);
+				HP = maxHP;
+				EXP = getEXPAtLevel(level);
+				break;
+			case Item.DIAMOND:
+				EXP += 100;
+				updateLevel(getLevelAtEXP(EXP));
+				break;
+			case Item.ENERGY:
+				HP += maxHP / 2;
+				break;
+			case Item.POTION:
+				HP += maxHP / 4;
+				break;
+		}
 		bag.remove(itemIndex);
 	}
 
 	public void pickItem(Map map, int objectIndex) {
-		int itemID = ((Item) map.objects.get(objectIndex)).ID;
+		char itemID = ((Item) map.objects.get(objectIndex)).ID;
 		switch (itemID) {
 			case Item.ASGARD:
 			case Item.DIAMOND:
@@ -72,9 +89,10 @@ public class Player extends Object {
 		}
 	}
 
-	public void attack(Monster foe) {
+	public int attack(Monster foe) {
 		int damage = (((2 * level / 5) + 2) * 40 * ATK / foe.DEF / 50) + 2;
 		foe.HP -= damage;
+		return damage;
 	}
 
 	public StateObject getStateObject() {
