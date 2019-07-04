@@ -42,7 +42,7 @@ public class Game {
 		}
 	};
 
-	public static final int FLOORAMOUNT = 3;
+	public static final int FLOORAMOUNT = 4;
 	public static final int SEARCHRADIUSSQ = Map.ROOM_SIZE * Map.ROOM_SIZE;
 
 	public Random the_rand;
@@ -50,20 +50,19 @@ public class Game {
 	public GUI the_gui;
 	public InputHandler the_handler;
 	public ArrayList<Map> the_world;
+	public String worldName;
 	public Map the_map;
+	public int mapIndex;
+	public StateObject playerStatus;
 	public ArrayList<MenuObject> openedMenu;
 	public ArrayList<GameAction> focusMenu;
 	public ArrayList<char[][][]> guideMenu;
+	public int lastCheckpointFloor;
+	public v2 lastCheckpointPos;
 
 	public Game(Random rand) {
 		the_rand = rand;
-		the_player = new Player(the_rand);
-		the_player.maxHP = rand.nextInt(100) + 1;
-		the_player.HP = rand.nextInt(the_player.maxHP + 1);
-		the_player.maxMana = rand.nextInt(100) + 1;
-		the_player.mana = rand.nextInt(the_player.maxMana + 1);
-		the_player.bag.add(0);
-		the_player.bag.add(1);
+		the_player = new Player(the_rand, 5);
 		the_gui = new GUI();
 		the_handler = new InputHandler(this);
 		the_world = new ArrayList<Map>();
@@ -73,12 +72,16 @@ public class Game {
 	}
 
 	public boolean start() {
+		worldName = NameRandomizer.next(the_rand, 10);
 		for (int i = 0; i < FLOORAMOUNT; i ++)
 			the_world.add(Map.createMap(the_rand, i));
-		the_map = the_world.get(0);
+		mapIndex = 0;
+		the_map = the_world.get(mapIndex);
 		the_player.pos.x = 3;
 		the_player.pos.y = 3;
 		the_map.objects.add(the_player);
+		lastCheckpointFloor = 0;
+		lastCheckpointPos = new v2(3, 3);
 		openedMenu.removeAll(openedMenu);
 		focusMenu.removeAll(focusMenu);
 		guideMenu.removeAll(guideMenu);
@@ -93,7 +96,13 @@ public class Game {
 		the_gui.setBackground(the_map);
 		the_gui.limitBackgroundView(10);
 		the_gui.cleanObject();
-		String levelName = NameRandomizer.next(the_rand, 10) + " L" + (1 + the_rand.nextInt(9));
+		the_map.objects.add(the_player);
+		openedMenu.removeAll(openedMenu);
+		focusMenu.removeAll(focusMenu);
+		guideMenu.removeAll(guideMenu);
+		focusMenu.add(GameAction.NOACTION);
+		guideMenu.add(GUIDE_MAIN);
+		String levelName = worldName + " L" + (mapIndex + 1);
 		levelName = levelName.substring(0, 1).toUpperCase() + levelName.substring(1);
 		TextObject levelNameObject = new TextObject();
 		levelNameObject.pos.x = GUI.MAP_WIDTH - levelName.length() - 4;
@@ -103,28 +112,9 @@ public class Game {
 		levelNameObject.text = levelName.toCharArray();
 		levelNameObject.color = 1;
 		the_gui.addObject(levelNameObject);
-		StateObject playerStatus = new StateObject();
-		playerStatus.name = the_player.name.toCharArray();
-		playerStatus.entityType = new char[0];
-		playerStatus.level = the_rand.nextInt(10) + 5;
-		playerStatus.gender = GenderType.MALE;
-		ProgressBar playerStatusHP = new ProgressBar();
-		playerStatusHP.icon = 28;
-		playerStatusHP.color = 2;
-		playerStatusHP.value = the_player.HP;
-		playerStatusHP.min = 0;
-		playerStatusHP.max = the_player.maxHP;
-		ProgressBar playerStatusMana = new ProgressBar();
-		playerStatusMana.icon = 29;
-		playerStatusMana.color = 3;
-		playerStatusMana.value = the_player.mana;
-		playerStatusMana.min = 0;
-		playerStatusMana.max = the_player.maxMana;
-		playerStatus.bars = new ProgressBar[2];
-		playerStatus.bars[0] = playerStatusHP;
-		playerStatus.bars[1] = playerStatusMana;
+		playerStatus = the_player.getStateObject();
 		playerStatus.pos.x = GUI.MAP_WIDTH - 16;
-		playerStatus.pos.y = GUI.MAP_HEIGHT - 2 - 6;
+		playerStatus.pos.y = GUI.MAP_HEIGHT - 2 - 7;
 		the_gui.addObject(playerStatus);
 		focusMenu.add(GameAction.RESUMELEVEL);
 		guideMenu.add(GUIDE_MAIN);
@@ -143,9 +133,37 @@ public class Game {
 		return true;
 	}
 
+	public boolean monsterAttack() {
+		for (Object i : the_map.objects) {
+			if (i.type == ObjectType.MONSTER && (
+					i.pos.equals(new v2(the_player.pos.x - 1, the_player.pos.y)) ||
+					i.pos.equals(new v2(the_player.pos.x + 1, the_player.pos.y)) ||
+					i.pos.equals(new v2(the_player.pos.x, the_player.pos.y - 1)) ||
+					i.pos.equals(new v2(the_player.pos.x, the_player.pos.y + 1)))) {
+				((Monster) i).attack(the_player);
+			}
+		}
+		playerStatus = the_player.getStateObject();
+		playerStatus.pos.x = GUI.MAP_WIDTH - 16;
+		playerStatus.pos.y = GUI.MAP_HEIGHT - 2 - 7;
+		the_gui.setObject(1, playerStatus);
+		if (the_player.HP <= 0) {
+			mapIndex = lastCheckpointFloor;
+			the_map = the_world.get(mapIndex);
+			the_player.pos = lastCheckpointPos.clone();
+			the_player.HP = the_player.maxHP;
+			the_player.mana = the_player.maxMana;
+			resumeLevel();
+			return false;
+		}
+		return true;
+	}
+
 	public boolean openAttackPick() {
 		DataIntObject attackPickMenu = new DataIntObject();
 		attackPickMenu.dataInt = new int[4];
+		for (int j = 0; j < 4; j ++)
+			attackPickMenu.dataInt[j] = -1;
 		openedMenu.add(attackPickMenu);
 		int i = 0;
 		for (int k = 0; k < the_map.objects.size(); k ++) {
@@ -348,6 +366,7 @@ public class Game {
 					the_player.pos.x --;
 					the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
 					moveMonsters();
+					monsterAttack();
 					the_gui.draw();
 				}
 			} else if (keyCode == 38) {
@@ -356,6 +375,7 @@ public class Game {
 					the_player.pos.y --;
 					the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
 					moveMonsters();
+					monsterAttack();
 					the_gui.draw();
 				}
 			} else if (keyCode == 39) {
@@ -364,6 +384,7 @@ public class Game {
 					the_player.pos.x ++;
 					the_gui.backgroundMapTranslation.x = GUI.MAP_WIDTH / 2 - the_player.pos.x;
 					moveMonsters();
+					monsterAttack();
 					the_gui.draw();
 				}
 			} else if (keyCode == 40) {
@@ -372,6 +393,7 @@ public class Game {
 					the_player.pos.y ++;
 					the_gui.backgroundMapTranslation.y = GUI.MAP_HEIGHT / 2 - the_player.pos.y;
 					moveMonsters();
+					monsterAttack();
 					the_gui.draw();
 				}
 			}
@@ -395,9 +417,49 @@ public class Game {
 			if (keyCode == 88) {
 				closeAttackPick();
 			} else if (keyCode >= 37 && keyCode <= 40) {
-				the_player.attackPick(the_map, ((DataIntObject) currentMenu).dataInt[keyCode - 37]);
-				closeAttackPick();
-				the_gui.draw();
+				int objectIndex = ((DataIntObject) currentMenu).dataInt[keyCode - 37];
+				if (objectIndex < 0)
+					return;
+				Object o = the_map.objects.get(objectIndex);
+				if (o.type == ObjectType.ITEM) {
+					int oID = ((Item) o).ID;
+					if (oID == Item.UP_LADDER) {
+						mapIndex ++;
+						the_map = the_world.get(mapIndex);
+						resumeLevel();
+					} else if (oID == Item.DOWN_LADDER) {
+						mapIndex --;
+						the_map = the_world.get(mapIndex);
+						resumeLevel();
+					} else if (oID == Item.CHECKPOINT) {
+						lastCheckpointFloor = mapIndex;
+						lastCheckpointPos = the_player.pos.clone();
+						closeAttackPick();
+						the_gui.draw();
+					} else {
+						the_player.pickItem(the_map, ((DataIntObject) currentMenu).dataInt[keyCode - 37]);
+						if (monsterAttack()) {
+							closeAttackPick();
+							the_gui.draw();
+						}
+					}
+				} else if (o.type == ObjectType.MONSTER) {
+					the_player.attack((Monster) o);
+					if (((Monster) o).HP <= 0) {
+						the_player.EXP += 250 * ((Monster) o).level / 7;
+						the_player.updateLevel(Player.getLevelAtEXP(the_player.EXP));
+						playerStatus = the_player.getStateObject();
+						playerStatus.pos.x = GUI.MAP_WIDTH - 16;
+						playerStatus.pos.y = GUI.MAP_HEIGHT - 2 - 7;
+						the_gui.setObject(1, playerStatus);
+						the_map.objects.remove(objectIndex);
+						the_gui.draw();
+					}
+					if (monsterAttack()) {
+						closeAttackPick();
+						the_gui.draw();
+					}
+				}
 			}
 		} else if (focus == GameAction.BAGSCREEN) {
 			if (keyCode == 88) {
@@ -421,7 +483,6 @@ public class Game {
 			if (keyCode == 88) {
 				closeItemScreen();
 			} else if (keyCode == 90) {
-				// ketika item dipilih
 				the_player.useItem(openedMenu.get(openedMenu.size() - 2).selected - 2);
 				closeItemScreen();
 				closeBagScreen();

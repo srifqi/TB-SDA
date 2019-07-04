@@ -3,14 +3,26 @@ package maze;
 import java.util.Random;
 
 public class Item extends Object {
+	public static final char ASGARD = 0;
+	public static final char CHECKPOINT = 1;
+	public static final char DIAMOND = 2;
+	public static final char ENERGY = 3;
+	public static final char POTION = 4;
+	public static final char LEFT_GATE = 5;
+	public static final char RIGHT_GATE = 6;
+	public static final char BOTTOM_GATE = 7;
+	public static final char TOP_GATE = 8;
+	public static final char UP_LADDER = 9;
+	public static final char DOWN_LADDER = 10;
+
 	public int ID;
 
-	public Item(Random rand) {
+	public Item(int _ID) {
 		super();
 		type = ObjectType.ITEM;
-		icon = 'I';
+		icon = (char) (Tile.ASGARD + _ID);
 		color = 6;
-		ID = rand.nextInt(Text.ITEMS.length);
+		ID = _ID;
 		name = Text.ITEMS[ID];
 	}
 
