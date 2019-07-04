@@ -153,8 +153,13 @@ public class GUI extends JFrame {
 		return drawList.size() - 1;
 	}
 
+	public void setObject(int index, DrawObject _entry) {
+		drawList.set(index, _entry);
+	}
+
 	public void closeObject() {
-		drawList.remove(drawList.size() - 1);
+		if (!drawList.isEmpty())
+			drawList.remove(drawList.size() - 1);
 	}
 
 	public void closeObject(int index) {

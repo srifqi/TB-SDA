@@ -14,6 +14,13 @@ public class v2 {
 		y = _y;
 	}
 
+	public v2 clone() {
+		v2 cloned = new v2();
+		cloned.x = x;
+		cloned.y = y;
+		return cloned;
+	}
+
 	public boolean equals(v2 target) {
 		return (target.x == x) && (target.y == y);
 	}
