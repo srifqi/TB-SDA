@@ -7,6 +7,7 @@ import java.util.Random;
 
 class Tile {
 	public static final char ICON_HP = 28;
+	public static final char ICON_EXP = 29;
 	public static final char ICON_FEMALE = 30;
 	public static final char ICON_MALE = 31;
 

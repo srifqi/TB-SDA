@@ -98,13 +98,13 @@ public class Player extends Object {
 		playerStat.level = level;
 		playerStat.gender = gender;
 		ProgressBar plyrStatHP = new ProgressBar();
-		plyrStatHP.icon = 28;
+		plyrStatHP.icon = Tile.ICON_HP;
 		plyrStatHP.color = 2;
 		plyrStatHP.value = HP;
 		plyrStatHP.min = 0;
 		plyrStatHP.max = maxHP;
 		ProgressBar plyrStatEXP = new ProgressBar();
-		plyrStatEXP.icon = 'E';
+		plyrStatEXP.icon = Tile.ICON_EXP;
 		plyrStatEXP.color = 3;
 		plyrStatEXP.value = EXP;
 		plyrStatEXP.min = getEXPAtLevel(level);
