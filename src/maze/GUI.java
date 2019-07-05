@@ -17,7 +17,7 @@ class DrawObject {
 	public DrawType type;
 	public v2 pos;
 
-	DrawObject() {
+	public DrawObject() {
 		pos = new v2();
 	}
 }
