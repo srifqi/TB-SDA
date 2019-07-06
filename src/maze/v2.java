@@ -29,13 +29,4 @@ public class v2 {
 		return (target.x - x) * (target.x - x) +
 				(target.y - y) * (target.y - y);
 	}
-
-	public double distTo(v2 target) {
-		return Math.sqrt(distToSq(target));
-	}
-
-	public int manhattanDistTo(v2 target) {
-		return (target.x - x) * (target.x - x) +
-				(target.y - y) * (target.y - y);
-	}
 }
